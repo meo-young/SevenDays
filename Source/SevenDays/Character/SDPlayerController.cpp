@@ -1,19 +1,17 @@
 #include "Character/SDPlayerController.h"
 #include "EnhancedInputSubsystems.h"
+#include "SevenDays.h"
 
 void ASDPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	if (UEnhancedInputLocalPlayerSubsystem* LocalPlayerSubsystem =  ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+	if (UEnhancedInputLocalPlayerSubsystem* LocalPlayerSubsystem =  GetLocalPlayer()->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
 	{
 		if (MappingContext)
 		{
+			LOG(TEXT("MappingContext 바인드"));
 			LocalPlayerSubsystem->AddMappingContext(MappingContext, 0);
 		}
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("EnhancedInputLocalPlayerSubsystem이 유효하지 않습니다"));
 	}
 }

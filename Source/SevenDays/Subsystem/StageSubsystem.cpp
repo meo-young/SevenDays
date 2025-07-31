@@ -24,6 +24,9 @@ void UStageSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 
 void UStageSubsystem::StartStage()
 {
+	ASDCharacter* Player = Cast<ASDCharacter>(GetGameInstance()->GetFirstLocalPlayerController()->GetPawn());
+	Player->DisablePlayerInput();
+	
 	// 1. EyeCatch를 화면에 표시합니다.
 	ChapterWidgetInstance->ShowEyeCatch(CurrentStageIndex);
 

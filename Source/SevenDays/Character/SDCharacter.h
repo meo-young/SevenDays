@@ -4,6 +4,7 @@
 #include "GameFramework/Character.h"
 #include "SDCharacter.generated.h"
 
+class UCameraComponent;
 class UChapterWidget;
 struct FInputActionValue;
 class UInputAction;
@@ -14,7 +15,17 @@ class SEVENDAYS_API ASDCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
+	ASDCharacter();
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+public:
+	/** 플레이어의 입력을 비활성화 하는 함수입니다.*/
+	UFUNCTION(BlueprintCallable)
+	void DisablePlayerInput();
+
+	/** 플레이어의 입력을 활성화 하는 함수입니다.*/
+	UFUNCTION(BlueprintCallable)
+	void EnablePlayerInput();
 
 protected:
 	/** W,A,S,D 키 입력을 처리하기 위한 함수입니다. */
@@ -41,5 +52,8 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputAction* InteractAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Components")
+	UCameraComponent* CameraComponent;
 
 };
