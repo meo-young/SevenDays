@@ -26,19 +26,16 @@ void ASDCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	{
 		if (MoveAction)
 		{
-			LOG(TEXT("Move Action 바인드"));
 			EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ThisClass::MoveInput);
 		}
 
 		if (LookAction)
 		{
-			LOG(TEXT("Look Action 바인드"));
 			EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ThisClass::LookInput);
 		}
 
 		if (InteractAction)
 		{
-			LOG(TEXT("Interact Action 바인드"));
 			EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &ThisClass::DoInteract);
 		}
 	}

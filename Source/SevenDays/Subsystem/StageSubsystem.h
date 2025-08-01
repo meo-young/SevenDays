@@ -4,6 +4,8 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "StageSubsystem.generated.h"
 
+enum class EMissionType : uint8;
+class UMissionWidget;
 class UChapterWidget;
 
 UCLASS(Blueprintable)
@@ -29,7 +31,13 @@ protected:
 	TSubclassOf<UChapterWidget> ChapterWidgetClass;
 
 	UPROPERTY()
-	UChapterWidget* ChapterWidgetInstance;
+	UChapterWidget* ChapterWidgetInstance = nullptr;
+
+	UPROPERTY()
+	TSubclassOf<UMissionWidget> MissionWidgetClass;
+
+	UPROPERTY()
+	UMissionWidget* MissionWidgetInstance = nullptr;
 
 private:
 	/** 현재 스테이지를 나타내는 변수입니다. */
@@ -37,5 +45,6 @@ private:
 
 public:
 	FORCEINLINE UChapterWidget* GetChapterWidget() const { return ChapterWidgetInstance; }
+	FORCEINLINE UMissionWidget* GetMissionWidget() const { return MissionWidgetInstance; }
 	
 };

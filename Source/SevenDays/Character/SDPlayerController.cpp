@@ -10,7 +10,6 @@ void ASDPlayerController::SetupInputComponent()
 	{
 		if (MappingContext)
 		{
-			LOG(TEXT("MappingContext 바인드"));
 			LocalPlayerSubsystem->AddMappingContext(MappingContext, 0);
 		}
 	}
