@@ -3,7 +3,9 @@
 #include "SevenDays.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InteractionComponent.h"
+#include "Core/SDGameModeBase.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 ASDCharacter::ASDCharacter()
 {
@@ -52,6 +54,38 @@ void ASDCharacter::DisablePlayerInput()
 void ASDCharacter::EnablePlayerInput()
 {
 	EnableInput(Cast<APlayerController>(GetController()));
+}
+
+void ASDCharacter::SetDeadMode_Implementation()
+{
+	DisablePlayerInput();
+	GetMesh()->SetSimulatePhysics(true);
+	GetMesh()->GetAnimInstance()->EnableUpdateAnimation(false);
+	CameraComponent->bUsePawnControlRotation = false;
+	bUseControllerRotationPitch = true;
+	bUseControllerRotationRoll = true;
+	SetBattery(0);
+
+	FTimerHandle SimulatedPhysicsHandle;
+	GetWorld()->GetTimerManager().SetTimer(SimulatedPhysicsHandle, FTimerDelegate::CreateLambda([this]()
+	{
+		CameraComponent->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+	}), 2.0f, false);
+}
+
+void ASDCharacter::SetNormalMode_Implementation()
+{
+	/*CameraComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepWorldTransform, TEXT("head"));
+	EnablePlayerInput();
+	GetMesh()->SetSimulatePhysics(false);
+	GetMesh()->GetAnimInstance()->EnableUpdateAnimation(true);
+	CameraComponent->bUsePawnControlRotation = true;
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationRoll = false;*/
+	Destroy();
+	GetWorld()->GetAuthGameMode()->RestartPlayer(GetController());
+
+	SetBattery(100);
 }
 
 void ASDCharacter::MoveInput(const FInputActionValue& Value)

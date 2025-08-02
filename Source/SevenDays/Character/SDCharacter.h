@@ -28,6 +28,24 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void EnablePlayerInput();
 
+	/** 플레이어를 죽음 모드로 전환하는 함수입니다. */
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void SetDeadMode();
+	virtual void SetDeadMode_Implementation();
+
+	/** 플레이어를 일반 모드로 전환하는 함수입니다. */
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void SetNormalMode();
+	virtual void SetNormalMode_Implementation();
+
+	/** 배터리 양을 설정하는 함수입니다. */
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetBattery(uint8 Battery);
+
+	/** 배터리 양을 가져오는 함수입니다. */
+	UFUNCTION(BlueprintImplementableEvent)
+	uint8 GetBattery() const;
+
 protected:
 	/** W,A,S,D 키 입력을 처리하기 위한 함수입니다. */
 	void MoveInput(const FInputActionValue& Value);
@@ -42,8 +60,8 @@ protected:
 	void DoLook(const float Pitch, const float Yaw);
 
 	/** 상호작용을 수행하는 함수입니다. */
-	void DoInteract();
-
+	void DoInteract(); 
+	
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputAction* MoveAction;
@@ -54,7 +72,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputAction* InteractAction;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Components")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
 	UCameraComponent* CameraComponent;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Components")

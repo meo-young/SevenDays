@@ -8,5 +8,7 @@ UCLASS()
 class SEVENDAYS_API ASDGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
+
+public:
 	
 };

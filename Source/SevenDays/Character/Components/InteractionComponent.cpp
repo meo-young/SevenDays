@@ -64,6 +64,10 @@ void UInteractionComponent::LineTraceForward()
 
 void UInteractionComponent::StartInteraction()
 {
+	// 플레이어 입력을 다시 활성화합니다.
+	ASDCharacter* Player = Cast<ASDCharacter>(GetOwner());
+	Player->EnablePlayerInput();
+	
 	// 상호작용이 가능한 오브젝트라면 Interact 함수를 호출합니다.
 	if (bCanInteract)
 	{
@@ -75,14 +79,11 @@ void UInteractionComponent::StartInteraction()
 	else
 	{
 		// @TODO: 플레이어 체력 1 감소
+		Player->SetBattery(FMath::Clamp(Player->GetBattery() - 40, 0, 100));
 	}
 
 	// 일반 Crosshair로 변경합니다.
 	CrosshairWidgetInstance->NormalCrosshair();
-
-	// 플레이어 입력을 다시 활성화합니다.
-	ASDCharacter* Player = Cast<ASDCharacter>(GetOwner());
-	Player->EnablePlayerInput();
 
 	// 카메라 플래시 소리를 재생합니다.
 	USoundSubsystem* SoundSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<USoundSubsystem>();

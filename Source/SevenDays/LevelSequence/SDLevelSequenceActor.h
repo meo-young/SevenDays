@@ -62,5 +62,8 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Components")
 	UBoxComponent* InteractionBox = nullptr;
+
+public:
+	FORCEINLINE ULevelSequencePlayer* GetLevelSequencePlayer() const { return LevelSequencePlayer; }
 	
 };

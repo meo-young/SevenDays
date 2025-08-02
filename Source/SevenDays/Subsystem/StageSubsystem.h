@@ -4,6 +4,7 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "StageSubsystem.generated.h"
 
+class ASDLevelSequenceActor;
 class AHorrorLevelSequenceActor;
 class UFadeWidget;
 struct FStageEventTableRow;
@@ -31,6 +32,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void EndStage();
 
+	/** 스테이지를 처음부터 시작하는 함수입니다. */
+	UFUNCTION(BlueprintCallable)
+	void InitStage();
+
 private:
 	/** 현재 스테이지에 대한 이벤트 정보를 가져옵니다. */
 	void GetCurrentStageEvent();
@@ -39,8 +44,12 @@ private:
 	UFUNCTION()
 	void ShowCurrentStageEvent();
 
+	/** 플레이어를 시작 지점으로 텔레포트하는 함수입니다. */
 	UFUNCTION()
 	void TeleportPlayerToStartPoint();
+
+	/** 스테이지를 정리하는 함수입니다. */
+	void CleanStage();
 
 protected:
 	/** Chapter Widget 클래스입니다. */
@@ -92,6 +101,25 @@ protected:
 private:
 	/** 현재 스테이지를 나타내는 변수입니다. */
 	uint8 CurrentStageIndex = 0;
+
+	/** Missing Event에 대한 인스턴스 변수입니다. */
+	UPROPERTY()
+	TArray<AMissingLevelSequenceActor*> MissingEventInstances;
+
+	/** New Event에 대한 인스턴스 변수입니다. */
+	UPROPERTY()
+	TArray<ANewLevelSequenceActor*> NewEventInstances;
+
+	/** Horror Event에 대한 인스턴스 변수입니다. */
+	UPROPERTY()
+	TArray<AHorrorLevelSequenceActor*> HorrorEventInstances;
+
+	/** 인스턴스 초기화를 위한 변수입니다. */
+	uint8 bIsFirstTime : 1 = true;
+
+	/** 현재 스테이지 이벤트에 대한 참조 변수입니다. */
+	UPROPERTY()
+	ASDLevelSequenceActor* CurrentEvent = nullptr;
 
 public:
 	FORCEINLINE UChapterWidget* GetChapterWidget() const { return ChapterWidgetInstance; }
