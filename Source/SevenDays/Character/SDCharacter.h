@@ -60,4 +60,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Components")
 	UInteractionComponent* InteractionComponent;
 
+public:
+	FORCEINLINE UCameraComponent* GetCameraComponent() const { return CameraComponent; }
+
 };

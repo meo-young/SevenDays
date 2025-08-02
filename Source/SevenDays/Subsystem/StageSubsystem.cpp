@@ -124,7 +124,10 @@ void UStageSubsystem::ShowCurrentStageEvent()
 	// 현재 스테이지에 대한 이벤트를 모두 출력한 경우 종료합니다.
 	if (CurrentStageMissionTypes.Num() <= 0)
 	{
-		EndStage();
+		// @TODO: 시간 정지
+		
+		FTimerHandle EndStageHandle;
+		GetWorld()->GetTimerManager().SetTimer(EndStageHandle, this, &ThisClass::EndStage, 2.0f, false);
 		return;
 	}
 

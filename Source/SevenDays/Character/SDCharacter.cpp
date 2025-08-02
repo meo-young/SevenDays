@@ -96,5 +96,5 @@ void ASDCharacter::DoLook(const float Pitch, const float Yaw)
 
 void ASDCharacter::DoInteract()
 {
-	InteractionComponent->StartInteraction();
+	InteractionComponent->LineTraceForward();
 }
