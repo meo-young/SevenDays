@@ -4,6 +4,8 @@
 #include "Character/SDCharacter.h"
 #include "Define/DefineClass.h"
 #include "Interface/Interactable.h"
+#include "Subsystem/SoundSubsystem.h"
+#include "UI/CrosshairWidget.h"
 
 void UInteractionComponent::BeginPlay()
 {
@@ -14,6 +16,12 @@ void UInteractionComponent::BeginPlay()
 	// 플레이어 카메라의 PostProcessSettings를 설정
 	PlayerCameraComponent = Player->GetCameraComponent();
 	PlayerCameraComponent->PostProcessSettings.bOverride_AutoExposureBias = true;
+
+	if (CrosshairWidgetClass)
+	{
+		CrosshairWidgetInstance = CreateWidget<UCrosshairWidget>(GetWorld(), CrosshairWidgetClass);
+		CrosshairWidgetInstance->ShowCrosshair();
+	}
 }
 
 
@@ -22,6 +30,13 @@ void UInteractionComponent::LineTraceForward()
 	// 플레이어 입력을 비활성화 합니다.
 	ASDCharacter* Player = Cast<ASDCharacter>(GetOwner());
 	Player->DisablePlayerInput();
+
+	// 카메라 셔터 소리를 재생합니다.
+	USoundSubsystem* SoundSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<USoundSubsystem>();
+	SoundSubsystem->PlaySFX(ESFX::Camera_Shutter, Player->GetActorLocation());
+
+	// Crosshair 위젯을 로딩 상태로 변경합니다.
+	CrosshairWidgetInstance->LoadingCrosshair();
 	
 	// 카메라의 현재 위치에서 정면을 기준으로 LineTracing을 수행합니다.
 	const UCameraComponent* CameraComponent = GetOwner()->FindComponentByClass<UCameraComponent>();
@@ -62,9 +77,16 @@ void UInteractionComponent::StartInteraction()
 		// @TODO: 플레이어 체력 1 감소
 	}
 
+	// 일반 Crosshair로 변경합니다.
+	CrosshairWidgetInstance->NormalCrosshair();
+
 	// 플레이어 입력을 다시 활성화합니다.
 	ASDCharacter* Player = Cast<ASDCharacter>(GetOwner());
 	Player->EnablePlayerInput();
+
+	// 카메라 플래시 소리를 재생합니다.
+	USoundSubsystem* SoundSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<USoundSubsystem>();
+	SoundSubsystem->PlaySFX(ESFX::Camera_Flash, Player->GetActorLocation());
 
 	// 카메라 연출을 출력합니다.
 	ShowExposureEffect();

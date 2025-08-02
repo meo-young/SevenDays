@@ -4,6 +4,7 @@
 #include "Components/ActorComponent.h"
 #include "InteractionComponent.generated.h"
 
+class UCrosshairWidget;
 class UCameraComponent;
 class IInteractable;
 
@@ -28,6 +29,15 @@ public:
 
 	/** 카메라 노출 효과를 업데이트하는 함수입니다. */
 	void UpdateExposure();
+
+protected:
+	/** CrossHair 위젯 클래스입니다. */
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<UCrosshairWidget> CrosshairWidgetClass;
+
+	/** CrossHair 위젯 인스턴스입니다. */
+	UPROPERTY()
+	UCrosshairWidget* CrosshairWidgetInstance;
 
 private:
 	FHitResult InteractionHitResult;
