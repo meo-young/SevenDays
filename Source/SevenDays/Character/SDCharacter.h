@@ -4,6 +4,7 @@
 #include "GameFramework/Character.h"
 #include "SDCharacter.generated.h"
 
+class UInteractionComponent;
 class UCameraComponent;
 class UChapterWidget;
 struct FInputActionValue;
@@ -55,5 +56,8 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Components")
 	UCameraComponent* CameraComponent;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Components")
+	UInteractionComponent* InteractionComponent;
 
 };

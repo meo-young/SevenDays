@@ -1,5 +1,7 @@
 #pragma once
 
+#define ECC_INTERACTION		ECC_GameTraceChannel1
+
 UENUM(BlueprintType)
 enum class EMissionType : uint8
 {

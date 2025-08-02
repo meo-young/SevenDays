@@ -2,6 +2,7 @@
 #include "EnhancedInputComponent.h"
 #include "SevenDays.h"
 #include "Camera/CameraComponent.h"
+#include "Components/InteractionComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 ASDCharacter::ASDCharacter()
@@ -16,6 +17,8 @@ ASDCharacter::ASDCharacter()
 	CameraComponent->FirstPersonScale = 0.6f;
 
 	GetCharacterMovement()->MaxWalkSpeed = 100.0f;
+
+	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>(TEXT("InteractionComponent"));
 }
 
 void ASDCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -93,5 +96,5 @@ void ASDCharacter::DoLook(const float Pitch, const float Yaw)
 
 void ASDCharacter::DoInteract()
 {
-	UE_LOG(LogTemp, Warning, TEXT("DoInteract called!"));
+	InteractionComponent->StartInteraction();
 }
