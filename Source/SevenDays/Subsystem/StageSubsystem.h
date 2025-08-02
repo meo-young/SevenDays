@@ -4,6 +4,7 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "StageSubsystem.generated.h"
 
+class AHorrorLevelSequenceActor;
 class UFadeWidget;
 struct FStageEventTableRow;
 class ANewLevelSequenceActor;
@@ -74,6 +75,10 @@ protected:
 	UPROPERTY()
 	TArray<ANewLevelSequenceActor*> NewEvents;
 
+	/** 맵에 배치되어 있는 Horror Event에 대한 참조 변수입니다. */
+	UPROPERTY()
+	TArray<AHorrorLevelSequenceActor*> HorrorEvents;
+
 	/** 스테이지 이벤트 데이터 테이블입니다. */
 	UPROPERTY()
 	UDataTable* StageEventDataTable = nullptr;
@@ -93,5 +98,6 @@ public:
 	FORCEINLINE UMissionWidget* GetMissionWidget() const { return MissionWidgetInstance; }
 	FORCEINLINE void AddMissingEvent(AMissingLevelSequenceActor* MissingEvent) { MissingEvents.Emplace(MissingEvent); }
 	FORCEINLINE void AddNewEvent(ANewLevelSequenceActor* NewEvent) { NewEvents.Emplace(NewEvent); }
+	FORCEINLINE void AddHorrorEvent(AHorrorLevelSequenceActor* HorrorEvent) { HorrorEvents.Emplace(HorrorEvent); }
 	
 };

@@ -1,5 +1,6 @@
 #include "Subsystem/StageSubsystem.h"
 #include "EngineUtils.h"
+#include "LevelSequencePlayer.h"
 #include "SevenDays.h"
 #include "Define/DefineClass.h"
 #include "Character/SDCharacter.h"
@@ -7,6 +8,7 @@
 #include "LevelSequence/NewLevelSequenceActor.h"
 #include "DataTableRow/StageEventTableRow.h"
 #include "GameFramework/PlayerStart.h"
+#include "LevelSequence/HorrorLevelSequenceActor.h"
 #include "UI/ChapterWidget.h"
 #include "UI/MissionWidget.h"
 #include "UI/FadeWidget.h"
@@ -72,18 +74,24 @@ void UStageSubsystem::StartStage()
 	{
 		FadeWidgetInstance->RemoveFromParent();
 	}
+
+	// 2. 현재 스테이지에 맞는 분위기 LevelSequence를 재생합니다.
+	ULevelSequence* CurrentStageLevelSequence = StageEventRows[CurrentStageIndex]->StageLevelSequence;
+	ALevelSequenceActor* OutActor;
+	ULevelSequencePlayer* LevelSequencePlayer = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), CurrentStageLevelSequence, FMovieSceneSequencePlaybackSettings(), OutActor);
+	LevelSequencePlayer->Play();
 	
-	// 2. 플레이어 입력을 비활성화 합니다.
+	// 3. 플레이어 입력을 비활성화 합니다.
 	ASDCharacter* Player = Cast<ASDCharacter>(GetGameInstance()->GetFirstLocalPlayerController()->GetPawn());
 	Player->DisablePlayerInput();
 	
-	// 3. EyeCatch를 화면에 표시합니다.
+	// 4. EyeCatch를 화면에 표시합니다.
 	ChapterWidgetInstance->ShowEyeCatch(CurrentStageIndex);
 
-	// 4. 현재 스테이지에 대한 이벤트 정보를 가져옵니다.
+	// 5. 현재 스테이지에 대한 이벤트 정보를 가져옵니다.
 	GetCurrentStageEvent();
 
-	// 5. 현재 스테이지에 대한 첫 번째 이벤트를 출력합니다.
+	// 6. 현재 스테이지에 대한 첫 번째 이벤트를 출력합니다.
 	ShowCurrentStageEvent();
 }
 
@@ -97,7 +105,7 @@ void UStageSubsystem::EndStage()
 
 	// 3. 플레이어를 원래 위치로 복귀시킵니다.
 	FTimerHandle TeleportHandle;
-	GetWorld()->GetTimerManager().SetTimer(TeleportHandle, this, &ThisClass::TeleportPlayerToStartPoint, 3.0f, false);
+	GetWorld()->GetTimerManager().SetTimer(TeleportHandle, this, &ThisClass::TeleportPlayerToStartPoint, 3.5f, false);
 
 	// 4. 다음 스테이지를 시작합니다.
 	FTimerHandle StartStageHandle;
@@ -139,6 +147,9 @@ void UStageSubsystem::ShowCurrentStageEvent()
 			NewEvents.RemoveAt(RandIndex);
 			break;
 		case EMissionType::Horror:
+			RandIndex = FMath::RandRange(0, HorrorEvents.Num() - 1);
+			CurrentEvent = HorrorEvents[RandIndex];
+			HorrorEvents.RemoveAt(RandIndex);
 			break;
 	}
 
