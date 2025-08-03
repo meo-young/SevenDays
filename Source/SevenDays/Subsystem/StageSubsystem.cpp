@@ -11,6 +11,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "GameFramework/PlayerStart.h"
 #include "LevelSequence/HorrorLevelSequenceActor.h"
+#include "LevelSequence/MannequinLevelSequenceActor.h"
 #include "UI/ChapterWidget.h"
 #include "UI/MissionWidget.h"
 #include "UI/FadeWidget.h"
@@ -53,7 +54,8 @@ void UStageSubsystem::StartStage()
 	{
 		MissingEventInstances = MissingEvents;
 		NewEventInstances = NewEvents;
-		HorrorEventInstances = HorrorEvents; 
+		HorrorEventInstances = HorrorEvents;
+		MannequinEventInstances = MannequinEvents;
 		bIsFirstTime = false;
 	}
 	
@@ -150,6 +152,7 @@ void UStageSubsystem::ShowStageEvent()
 
 	// 이벤트 타입에 따라 이벤트를 출력합니다.
 	// 모든 이벤트를 사용한 경우 다시 초기화합니다.
+	USoundSubsystem* SoundSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<USoundSubsystem>();
 	uint8 RandIndex = 0;
 	CurrentEvent = nullptr;
 	switch (CurrentStageMissionTypes[0])
@@ -175,12 +178,24 @@ void UStageSubsystem::ShowStageEvent()
 		break;
 		
 	case EMissionType::Horror:
+		SoundSubsystem->PlaySFX2D(ESFX::Doll);
 		RandIndex = FMath::RandRange(0, HorrorEventInstances.Num() - 1);
 		CurrentEvent = HorrorEventInstances[RandIndex];
 		HorrorEventInstances.RemoveAt(RandIndex);
 		if (HorrorEventInstances.Num() <= 0)
 		{
 			HorrorEventInstances = HorrorEvents; 
+		}
+		break;
+		
+	case EMissionType::Mannequin:
+		SoundSubsystem->PlaySFX2D(ESFX::Mannequin);
+		RandIndex = FMath::RandRange(0, MannequinEventInstances.Num() - 1);
+		CurrentEvent = MannequinEventInstances[RandIndex];
+		MannequinEventInstances.RemoveAt(RandIndex);
+		if (MannequinEventInstances.Num() <= 0)
+		{
+			MannequinEventInstances = MannequinEvents; 
 		}
 		break;
 	}

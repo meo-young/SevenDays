@@ -8,7 +8,8 @@ enum class EMissionType : uint8
 {
 	Missing = 0,
 	New = 1,
-	Horror = 2
+	Horror = 2,
+	Mannequin = 3,
 };
 
 UENUM(BlueprintType)
@@ -19,7 +20,9 @@ enum class ESFX : uint8
 	FootStep = 2,
 	UnLockedDoor = 3,
 	BodyFall = 4,
-	Camera_WrongShutter = 5
+	Camera_WrongShutter = 5,
+	Mannequin = 6,
+	Doll = 7
 };
 
 UENUM(BlueprintType)

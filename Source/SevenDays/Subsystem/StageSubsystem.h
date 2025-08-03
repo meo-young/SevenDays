@@ -4,6 +4,7 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "StageSubsystem.generated.h"
 
+class AMannequinLevelSequenceActor;
 class ASDLevelSequenceActor;
 class AHorrorLevelSequenceActor;
 class UFadeWidget;
@@ -99,6 +100,10 @@ protected:
 	UPROPERTY()
 	TArray<AHorrorLevelSequenceActor*> HorrorEvents;
 
+	/** 맵에 배치되어 있는 Mannequin Event에 대한 참조 변수입니다. */
+	UPROPERTY()
+	TArray<AMannequinLevelSequenceActor*> MannequinEvents;
+
 	/** 스테이지 이벤트 데이터 테이블입니다. */
 	UPROPERTY()
 	UDataTable* StageEventDataTable = nullptr;
@@ -125,6 +130,10 @@ private:
 	UPROPERTY()
 	TArray<AHorrorLevelSequenceActor*> HorrorEventInstances;
 
+	/** Mannequin Event에 대한 인스턴스 변수입니다. */
+	UPROPERTY()
+	TArray<AMannequinLevelSequenceActor*> MannequinEventInstances;
+
 	/** 인스턴스 초기화를 위한 변수입니다. */
 	uint8 bIsFirstTime : 1 = true;
 
@@ -150,9 +159,13 @@ public:
 	FORCEINLINE void AddMissingEvent(AMissingLevelSequenceActor* MissingEvent) { MissingEvents.Emplace(MissingEvent); }
 	FORCEINLINE void AddNewEvent(ANewLevelSequenceActor* NewEvent) { NewEvents.Emplace(NewEvent); }
 	FORCEINLINE void AddHorrorEvent(AHorrorLevelSequenceActor* HorrorEvent) { HorrorEvents.Emplace(HorrorEvent); }
+	FORCEINLINE void AddMannequinEvent(AMannequinLevelSequenceActor* MannequinEvent) { MannequinEvents.Emplace(MannequinEvent); }
 
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE uint8 GetCurrentStageIndex() const { return CurrentStageIndex; }
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE void SetCurrentStageIndex(const uint8 StageIndex) { CurrentStageIndex = StageIndex; }
 	
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE bool IsStageStarted() const { return bIsStageStarted; }
