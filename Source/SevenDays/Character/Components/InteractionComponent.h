@@ -14,7 +14,9 @@ class SEVENDAYS_API UInteractionComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:
+	UInteractionComponent();
 	virtual void BeginPlay() override;
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 public:
 	/** 전방에 LineTracing을 실시하는 함수입니다. */
@@ -22,6 +24,9 @@ public:
 
 	/** 상호작용을 시작하는 함수입니다. */
 	void StartInteraction();
+
+	/** 문과 상호작용을 시작하는 함수입니다. */
+	void DoorInteraction();
 
 	/** 카메라 촬영 효과를 연출하는 함수입니다. */
 	UFUNCTION()
@@ -39,7 +44,11 @@ protected:
 	UPROPERTY()
 	UCrosshairWidget* CrosshairWidgetInstance;
 
+	UPROPERTY(BlueprintReadOnly)
+	uint8 bIsInteractionStarted : 1 = false;
+
 private:
+	FHitResult DoorHitResult;
 	FHitResult InteractionHitResult;
 	FCollisionQueryParams QueryParams;
 	FTimerHandle ExposureTimerHandle;
@@ -60,5 +69,10 @@ private:
 
 	/** 상호작용이 가능한지 판별하는 변수입니다. */
 	uint8 bCanInteract : 1 = false;
+	uint8 bCanDoorInteract : 1 = false;
+
+public:
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE UCrosshairWidget* GetCrosshairWidget() { return CrosshairWidgetInstance; }
 	
 };

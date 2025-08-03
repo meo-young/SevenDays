@@ -8,6 +8,4 @@ void AMissingLevelSequenceActor::BeginPlay()
 
 	UStageSubsystem* StageSubsystem = GetGameInstance()->GetSubsystem<UStageSubsystem>();
 	StageSubsystem->AddMissingEvent(this);
-
-	LOG(TEXT("Missing Level Sequence Actor BeginPlay: %s"), *GetName());
 }

@@ -8,6 +8,4 @@ void ANewLevelSequenceActor::BeginPlay()
 
 	UStageSubsystem* StageSubsystem = GetGameInstance()->GetSubsystem<UStageSubsystem>();
 	StageSubsystem->AddNewEvent(this);
-
-	LOG(TEXT("New Level Sequence Actor BeginPlay: %s"), *GetName());
 }

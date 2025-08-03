@@ -4,8 +4,10 @@
 #include "Camera/CameraComponent.h"
 #include "Components/InteractionComponent.h"
 #include "Core/SDGameModeBase.h"
+#include "Define/DefineClass.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Subsystem/SoundSubsystem.h"
 
 ASDCharacter::ASDCharacter()
 {
@@ -43,6 +45,11 @@ void ASDCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		{
 			EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &ThisClass::DoInteract);
 		}
+
+		if (DoorAction)
+		{
+			EnhancedInputComponent->BindAction(DoorAction, ETriggerEvent::Started, this, &ThisClass::OpenDoor);
+		}
 	}
 }
 
@@ -66,6 +73,13 @@ void ASDCharacter::SetDeadMode_Implementation()
 	bUseControllerRotationRoll = true;
 	SetBattery(0);
 
+	FTimerHandle DeadSoundHandle;
+	GetWorld()->GetTimerManager().SetTimer(DeadSoundHandle, FTimerDelegate::CreateLambda([this]()
+	{
+		USoundSubsystem* SoundSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<USoundSubsystem>();
+		SoundSubsystem->PlaySFX(ESFX::BodyFall, GetActorLocation() + FVector(0.0f, 0.0f, 10.0f));
+	}), 0.5f, false);
+
 	FTimerHandle SimulatedPhysicsHandle;
 	GetWorld()->GetTimerManager().SetTimer(SimulatedPhysicsHandle, FTimerDelegate::CreateLambda([this]()
 	{
@@ -75,13 +89,6 @@ void ASDCharacter::SetDeadMode_Implementation()
 
 void ASDCharacter::SetNormalMode_Implementation()
 {
-	/*CameraComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepWorldTransform, TEXT("head"));
-	EnablePlayerInput();
-	GetMesh()->SetSimulatePhysics(false);
-	GetMesh()->GetAnimInstance()->EnableUpdateAnimation(true);
-	CameraComponent->bUsePawnControlRotation = true;
-	bUseControllerRotationPitch = false;
-	bUseControllerRotationRoll = false;*/
 	Destroy();
 	GetWorld()->GetAuthGameMode()->RestartPlayer(GetController());
 
@@ -131,4 +138,9 @@ void ASDCharacter::DoLook(const float Pitch, const float Yaw)
 void ASDCharacter::DoInteract()
 {
 	InteractionComponent->LineTraceForward();
+}
+
+void ASDCharacter::OpenDoor()
+{
+	InteractionComponent->DoorInteraction();
 }

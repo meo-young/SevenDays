@@ -1,9 +1,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "LevelSequence.h"
 #include "StageEventTableRow.generated.h"
 
-class ULevelSequence;
 enum class EMissionType : uint8;
 
 USTRUCT()

@@ -1,6 +1,7 @@
 #pragma once
 
 #define ECC_INTERACTION		ECC_GameTraceChannel1
+#define ECC_DOOR			ECC_GameTraceChannel2
 
 UENUM(BlueprintType)
 enum class EMissionType : uint8
@@ -15,7 +16,10 @@ enum class ESFX : uint8
 {
 	Camera_Flash = 0,
 	Camera_Shutter = 1,
-	FootStep = 2
+	FootStep = 2,
+	UnLockedDoor = 3,
+	BodyFall = 4,
+	Camera_WrongShutter = 5
 };
 
 UENUM(BlueprintType)

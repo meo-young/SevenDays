@@ -13,6 +13,7 @@ class AMissingLevelSequenceActor;
 enum class EMissionType : uint8;
 class UMissionWidget;
 class UChapterWidget;
+class ULevelSequence;
 
 UCLASS(Blueprintable)
 class SEVENDAYS_API UStageSubsystem : public UGameInstanceSubsystem
@@ -20,7 +21,6 @@ class SEVENDAYS_API UStageSubsystem : public UGameInstanceSubsystem
 	GENERATED_BODY()
 
 public:
-	UStageSubsystem();
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 
 public:
@@ -36,20 +36,28 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void InitStage();
 
+	/** 현재 스테이지에 대한 이벤트를 출력하는 함수입니다. */
+	UFUNCTION(BlueprintCallable)
+	void ShowEvent();
+
+
 private:
 	/** 현재 스테이지에 대한 이벤트 정보를 가져옵니다. */
 	void GetCurrentStageEvent();
 
-	/** 현재 스테이지에 대한 첫 번째 이벤트를 출력합니다. */
+	/** 현재 스테이지에 대한 이벤트를 확인합니다. */
 	UFUNCTION()
-	void ShowCurrentStageEvent();
+	void CheckCurrentStageEvent();
 
-	/** 플레이어를 시작 지점으로 텔레포트하는 함수입니다. */
-	UFUNCTION()
-	void TeleportPlayerToStartPoint();
+	/** 현재 스테이지 이벤트를 출력하는 함수입니다. */
+	void ShowStageEvent();
 
 	/** 스테이지를 정리하는 함수입니다. */
 	void CleanStage();
+
+	/** 현재 스테이지 이벤트를 지연 시간 후에 호출하는 함수입니다. */
+	UFUNCTION()
+	void CallShowCurrentStageEventWithDelay();
 
 protected:
 	/** Chapter Widget 클래스입니다. */
@@ -58,7 +66,7 @@ protected:
 
 	/** Chapter Widget 인스턴스입니다. */
 	UPROPERTY()
-	UChapterWidget* ChapterWidgetInstance = nullptr;
+	TObjectPtr<UChapterWidget> ChapterWidgetInstance = nullptr;
 
 	/** Mission Widget 클래스입니다. */
 	UPROPERTY()
@@ -66,7 +74,7 @@ protected:
 
 	/** Mission Widget 인스턴스입니다. */
 	UPROPERTY()
-	UMissionWidget* MissionWidgetInstance = nullptr;
+	TObjectPtr<UMissionWidget> MissionWidgetInstance = nullptr;
 
 	/** Fade Widget 클래스입니다. */
 	UPROPERTY()
@@ -74,7 +82,7 @@ protected:
 
 	/** Fade Widget 인스턴스입니다. */
 	UPROPERTY()
-	UFadeWidget* FadeWidgetInstance = nullptr;
+	TObjectPtr<UFadeWidget> FadeWidgetInstance = nullptr;
 
 	/** 맵에 배치되어 있는 Missing Event에 대한 참조 변수입니다. */
 	UPROPERTY()
@@ -121,11 +129,35 @@ private:
 	UPROPERTY()
 	ASDLevelSequenceActor* CurrentEvent = nullptr;
 
+	/** 현재 스테이지가 시작되었는지 여부를 나타내는 변수입니다. */
+	UPROPERTY()
+	uint8 bIsStageStarted : 1 = false;
+
+	/** 현재 스테이지가 성공적으로 완료되었는지 여부를 나타내는 변수입니다. */
+	UPROPERTY()
+	uint8 bIsStageSucceeded : 1 = false;
+
+	/** 이벤트가 출력될 때 사용할 LevelSequence 입니다. */
+	UPROPERTY()
+	TObjectPtr<ULevelSequence> EventLevelSequence = nullptr;
+
 public:
 	FORCEINLINE UChapterWidget* GetChapterWidget() const { return ChapterWidgetInstance; }
 	FORCEINLINE UMissionWidget* GetMissionWidget() const { return MissionWidgetInstance; }
 	FORCEINLINE void AddMissingEvent(AMissingLevelSequenceActor* MissingEvent) { MissingEvents.Emplace(MissingEvent); }
 	FORCEINLINE void AddNewEvent(ANewLevelSequenceActor* NewEvent) { NewEvents.Emplace(NewEvent); }
 	FORCEINLINE void AddHorrorEvent(AHorrorLevelSequenceActor* HorrorEvent) { HorrorEvents.Emplace(HorrorEvent); }
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE bool IsStageStarted() const { return bIsStageStarted; }
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE void SetStageStarted(bool bStarted) { bIsStageStarted = bStarted; }
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE bool IsStageSucceeded() const { return bIsStageSucceeded; }
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE void SetStageSucceeded(bool bSucceeded) { bIsStageSucceeded = bSucceeded; }
 	
 };

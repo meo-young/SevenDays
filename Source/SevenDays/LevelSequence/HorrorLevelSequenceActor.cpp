@@ -8,6 +8,4 @@ void AHorrorLevelSequenceActor::BeginPlay()
 
 	UStageSubsystem* StageSubsystem = GetGameInstance()->GetSubsystem<UStageSubsystem>();
 	StageSubsystem->AddHorrorEvent(this);
-
-	LOG(TEXT("Missing Level Sequence Actor BeginPlay: %s"), *GetName());
 }

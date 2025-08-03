@@ -60,7 +60,10 @@ protected:
 	void DoLook(const float Pitch, const float Yaw);
 
 	/** 상호작용을 수행하는 함수입니다. */
-	void DoInteract(); 
+	void DoInteract();
+	
+	/** 문을 여는 함수를 수행하는 함수입니다. */
+	void OpenDoor();
 	
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
@@ -72,10 +75,13 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputAction* InteractAction;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* DoorAction;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
 	UCameraComponent* CameraComponent;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Components")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
 	UInteractionComponent* InteractionComponent;
 
 public:
