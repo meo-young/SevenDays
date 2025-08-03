@@ -132,6 +132,8 @@ void UInteractionComponent::StartInteraction()
 	else
 	{
 		SoundSubsystem->PlaySFX(ESFX::Camera_WrongShutter, Player->GetActorLocation());
+		if (!Player->IsBatteryActive()) return;
+		
 		Player->SetBattery(FMath::Clamp(Player->GetBattery() - 40, 0, 100));
 	}
 }

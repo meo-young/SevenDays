@@ -59,6 +59,9 @@ void ATutorialManager::Tick(float DeltaTime)
 
 void ATutorialManager::StartTutorial()
 {
+	ASDCharacter* Player = Cast<ASDCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
+	Player->SetBatteryActive(false);
+	
 	if (!TutorialEventList.IsEmpty())
 	{
 		if (TutorialEventList[0].TutorialStartDelegate.IsBound())
@@ -73,6 +76,9 @@ void ATutorialManager::StartTutorial()
 		{
 			OnAllTutorialEndDelegate.Broadcast();
 		}
+		
+		Player->SetBatteryActive(true);
+		
 		SetActorTickEnabled(false);
 	}
 }

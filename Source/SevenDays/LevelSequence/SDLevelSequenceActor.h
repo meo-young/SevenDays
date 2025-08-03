@@ -53,6 +53,10 @@ public:
 	/** IInteractable 인터페이스를 구현한 함수 */
 	virtual void Interact_Implementation();
 
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "JumpScare")
+	uint8 bIsJumpScare : 1 = false;
+
 private:
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	TObjectPtr<ULevelSequence> LevelSequence = nullptr;

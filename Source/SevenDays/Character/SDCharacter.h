@@ -89,10 +89,15 @@ private:
 	uint8 bIsEnableInteract : 1 = true;
 	uint8 bIsEnableDoorOpen : 1 = true;
 
+	UPROPERTY(BlueprintReadOnly, meta= (AllowPrivateAccess = true))
+	uint8 bIsBatteryActive : 1 = true;
+
 public:
 	FORCEINLINE UCameraComponent* GetCameraComponent() const { return CameraComponent; }
+	FORCEINLINE bool IsBatteryActive() const { return bIsBatteryActive; }
 	FORCEINLINE void SetEnableMove(const bool IsEnable) { bIsEnableMove = IsEnable; }
 	FORCEINLINE void SetEnableInteract(const bool IsEnable) { bIsEnableInteract = IsEnable; }
 	FORCEINLINE void SetEnableDoorOpen(const bool IsEnable) { bIsEnableDoorOpen = IsEnable; }
+	FORCEINLINE void SetBatteryActive(const bool IsActive) { bIsBatteryActive = IsActive; }
 
 };

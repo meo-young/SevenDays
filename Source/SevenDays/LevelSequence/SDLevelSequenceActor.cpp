@@ -3,6 +3,7 @@
 #include "LevelSequencePlayer.h"
 #include "SevenDays.h"
 #include "Components/BoxComponent.h"
+#include "Core/SDGameModeBase.h"
 #include "Define/DefineClass.h"
 
 ASDLevelSequenceActor::ASDLevelSequenceActor(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -93,4 +94,11 @@ void ASDLevelSequenceActor::Interact_Implementation()
 	StopLevelSequence();
 
 	OnInteractDelegate.Clear();
+	
+	if (bIsJumpScare)
+	{
+		FTimerHandle JumpScareHandle;
+		ASDGameModeBase* GameMode = Cast<ASDGameModeBase>(GetWorld()->GetAuthGameMode());
+		GetWorld()->GetTimerManager().SetTimer(JumpScareHandle, GameMode, &ASDGameModeBase::ShowJumpScare, 2.0f, false);
+	}
 }
