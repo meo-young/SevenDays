@@ -97,6 +97,8 @@ void ASDCharacter::SetNormalMode_Implementation()
 
 void ASDCharacter::MoveInput(const FInputActionValue& Value)
 {
+	if (!bIsEnableMove) return;
+	
 	const FVector2D MovementValue = Value.Get<FVector2D>();
 	if (MovementValue.IsNearlyZero())
 	{
@@ -108,6 +110,8 @@ void ASDCharacter::MoveInput(const FInputActionValue& Value)
 
 void ASDCharacter::LookInput(const FInputActionValue& Value)
 {
+	if (!bIsEnableMove) return;
+	
 	const FVector2D LookValue = Value.Get<FVector2D>();
 	if (LookValue.IsNearlyZero())
 	{
@@ -137,10 +141,14 @@ void ASDCharacter::DoLook(const float Pitch, const float Yaw)
 
 void ASDCharacter::DoInteract()
 {
+	if (!bIsEnableInteract) return;
+	
 	InteractionComponent->LineTraceForward();
 }
 
 void ASDCharacter::OpenDoor()
 {
+	if (!bIsEnableDoorOpen) return;
+	
 	InteractionComponent->DoorInteraction();
 }

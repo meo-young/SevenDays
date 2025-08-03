@@ -91,4 +91,6 @@ void ASDLevelSequenceActor::Interact_Implementation()
 	}
 
 	StopLevelSequence();
+
+	OnInteractDelegate.Clear();
 }

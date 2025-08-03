@@ -44,8 +44,6 @@ void UStageSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 	{
 		StageEventDataTable->GetAllRows(TEXT(""), StageEventRows);
 	}
-
-	CurrentStageIndex = 1;
 }
 
 void UStageSubsystem::StartStage()
@@ -86,6 +84,8 @@ void UStageSubsystem::EndStage()
 {
 	// 스테이지를 한 단계 증가시킵니다.
 	CurrentStageIndex++;
+
+	MissionWidgetInstance->CreateMissions();
 	
 	CleanStage();
 }
@@ -107,6 +107,15 @@ void UStageSubsystem::ShowEvent()
 	CheckCurrentStageEvent();
 }
 
+void UStageSubsystem::OpenDoorEvent()
+{
+	USoundSubsystem* SoundSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<USoundSubsystem>();
+	SoundSubsystem->PlaySFX(ESFX::UnLockedDoor, FVector(538.0f, -250.0f, 105.0f));
+		
+	SetStageStarted(false);
+	SetStageSucceeded(true);
+}
+
 void UStageSubsystem::GetCurrentStageEvent()
 {
 	// 현재 스테이지에 대한 이벤트를 가져옵니다.
@@ -119,11 +128,7 @@ void UStageSubsystem::CheckCurrentStageEvent()
 	// 현재 스테이지에 대한 이벤트를 모두 출력한 경우 종료합니다.
 	if (CurrentStageMissionTypes.Num() <= 0)
 	{
-		USoundSubsystem* SoundSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<USoundSubsystem>();
-		SoundSubsystem->PlaySFX(ESFX::UnLockedDoor, FVector(538.0f, -250.0f, 105.0f));
-		
-		SetStageStarted(false);
-		SetStageSucceeded(true);
+		OpenDoorEvent();
 		return;
 	}
 

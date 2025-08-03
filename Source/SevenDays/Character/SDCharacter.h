@@ -84,7 +84,15 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
 	UInteractionComponent* InteractionComponent;
 
+private:
+	uint8 bIsEnableMove : 1 = true;
+	uint8 bIsEnableInteract : 1 = true;
+	uint8 bIsEnableDoorOpen : 1 = true;
+
 public:
 	FORCEINLINE UCameraComponent* GetCameraComponent() const { return CameraComponent; }
+	FORCEINLINE void SetEnableMove(const bool IsEnable) { bIsEnableMove = IsEnable; }
+	FORCEINLINE void SetEnableInteract(const bool IsEnable) { bIsEnableInteract = IsEnable; }
+	FORCEINLINE void SetEnableDoorOpen(const bool IsEnable) { bIsEnableDoorOpen = IsEnable; }
 
 };

@@ -5,6 +5,8 @@
 #include "Interface/Interactable.h"
 #include "Door.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDoorInteract);
+
 class ULevelSequencePlayer;
 class UBoxComponent;
 class ULevelSequence;
@@ -18,6 +20,11 @@ public:
 	ADoor();
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
+
+public:
+	/** 상호작용 시 호출되는 델리게이트 */
+	UPROPERTY(BlueprintAssignable)
+	FOnDoorInteract OnInteractDelegate;
 
 public:
 	/** IInteractable 인터페이스를 구현한 함수 */

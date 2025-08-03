@@ -52,6 +52,11 @@ void ADoor::Interact_Implementation()
 			DoorOpenLevelSequencePlayer->Play();
 		}
 
+		if (OnInteractDelegate.IsBound())
+		{
+			OnInteractDelegate.Broadcast();
+		}
+
 		ASDCharacter* Player = Cast<ASDCharacter>(GetGameInstance()->GetFirstLocalPlayerController()->GetPawn());
 		Player->DisablePlayerInput();
 

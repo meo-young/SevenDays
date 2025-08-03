@@ -40,6 +40,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ShowEvent();
 
+	/** 문이 열리는 이벤트입니다. */
+	UFUNCTION(BlueprintCallable)
+	void OpenDoorEvent();
 
 private:
 	/** 현재 스테이지에 대한 이벤트 정보를 가져옵니다. */
@@ -148,6 +151,9 @@ public:
 	FORCEINLINE void AddNewEvent(ANewLevelSequenceActor* NewEvent) { NewEvents.Emplace(NewEvent); }
 	FORCEINLINE void AddHorrorEvent(AHorrorLevelSequenceActor* HorrorEvent) { HorrorEvents.Emplace(HorrorEvent); }
 
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE uint8 GetCurrentStageIndex() const { return CurrentStageIndex; }
+	
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE bool IsStageStarted() const { return bIsStageStarted; }
 

@@ -27,7 +27,6 @@ void UInteractionComponent::BeginPlay()
 	if (CrosshairWidgetClass)
 	{
 		CrosshairWidgetInstance = CreateWidget<UCrosshairWidget>(GetWorld(), CrosshairWidgetClass);
-		CrosshairWidgetInstance->ShowCrosshair();
 	}
 }
 
